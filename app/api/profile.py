@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 
 from app.models.profile import UserProfile
+from app.services.resume_extractor import extract_resume_text
 
 router = APIRouter()
 
@@ -9,27 +10,18 @@ async def build_profile(
     file: UploadFile = File(None),
     profile_text: str = Form(None)
 ):
-    # 1. Validate input: must have either file or profile text
-    if not file or not profile_text:
+    # Validate input: must have either file or profile text
+    if not file and not profile_text:
         raise HTTPException(status_code=400, detail="Must provide either a resume file or profile text.")
     
-    # 2. (Placeholder) Simulate extraction logic
-    # In future, you'll add file reading, LLM, etc.
-    dummy_profile = {
-        "full_name": "Priya Sharma",
-        "email": "priya@example.com",
-        "headline": "Backend Developer",
-        "summary": "10 years in SaaS, built scalable APIs...",
-        "location": "Bangalore, India",
-        "skills": [{"name": "Python", "proficiency": 5, "verified": False}],
-        "experience": [],
-        "education": [],
-        "certifications": [],
-        "social_links": [],
-        "languages": [],
-        "profile_photo_url": None,
-        "resume_file_url": None,
-        "video_intro_url": None
-    }
+    # Extract text from file or use pasted text
+    try:
+        if file:
+            text = await extract_resume_text(file)
+        else:
+            text = profile_text
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Resume extraction error: {str(e)}")
     
-    return dummy_profile
+    # For now, just return the raw extracted text
+    return { "extracted_text": text }

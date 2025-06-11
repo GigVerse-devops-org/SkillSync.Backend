@@ -5,3 +5,5 @@ email-validator
 python-multipart
 httpx
 python-dotenv
+pdfplumber
+python-docx
