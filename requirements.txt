@@ -1,6 +1,9 @@
-fastapi
+fastapi[all]
 uvicorn[standard]
-pydantic
 pydantic-settings
+email-validator
+python-multipart
 httpx
 python-dotenv
+pdfplumber
+python-docx
