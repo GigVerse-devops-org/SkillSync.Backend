@@ -3,7 +3,12 @@ uvicorn[standard]
 pydantic-settings
 email-validator
 python-multipart
-httpx
 python-dotenv
 pdfplumber
 python-docx
+langchain
+langchain-openai
+openai
+tiktoken
+python-magic
+pdfminer.six
