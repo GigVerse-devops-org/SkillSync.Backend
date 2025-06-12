@@ -1,5 +1,11 @@
+import logging
 from fastapi import FastAPI
 from app.api.router import router as api_router
+
+logging.basicConfig(
+    level=logging.info,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
 
 app = FastAPI(
     title="SkillSync Backend",
