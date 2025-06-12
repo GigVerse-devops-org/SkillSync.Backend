@@ -15,6 +15,16 @@ class Experience(BaseModel):
     start_date: Optional[date]
     end_date: Optional[date]
     description: Optional[str]
+    
+class Project(BaseModel):
+    title: str
+    description: Optional[str]
+    technologies: Optional[List[str]]
+    start_date: Optional[date]
+    end_date: Optional[date]
+    url: Optional[HttpUrl]
+    role: Optional[str]
+    highlights: Optional[List[str]]
 
 class Education(BaseModel):
     degree: str
@@ -46,6 +56,7 @@ class UserProfile(BaseModel):
     location: Optional[str] = Field(None, description="Location (City, Country)")
     skills: List[Skill] = Field(default_factory=list, description="List of skills")
     experience: List[Experience] = Field(default_factory=list, description="Work Experience")
+    projects: List[Project] = Field(default_factory=list, description="List of projects")
     education: List[Education] = Field(default_factory=list, description="Education history")
     certifications: List[Certification] = Field(default_factory=list, description="Certifications")
     social_links: List[SocialLink] = Field(default_factory=list, description="Social links")

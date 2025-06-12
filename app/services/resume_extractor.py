@@ -51,7 +51,7 @@ def extract_resume_text(file_contents: bytes, file_extension: str) -> str:
     try:
         if file_extension == ".pdf":
             return extract_text_from_pdf(file_contents)
-        elif file_extension == ".docx":
+        elif file_extension in [".doc", ".docx"]:
             return extract_text_from_docx(file_contents)
         elif file_extension == ".txt":
             return extract_text_from_txt(file_contents)

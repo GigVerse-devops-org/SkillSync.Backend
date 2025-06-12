@@ -62,7 +62,17 @@ Processing Guidelines:
     - Certification: Extract with name, authority and year
     - Languages: Categorize and assign proficiency levels ('Basic', 'Fluent', 'Native')
     
-4. Error Handling:
+4. Project Information:
+    - Extract project titles and descriptions
+    - Identify technologies used in each project
+    - Extract project dates (start and end)
+    - Extract project URLs (if available)
+    - Extract project role and responsibilities
+    - Extract project highlights and achievements
+    - Handle both personal and professional projects
+    - Categorize projects by type (e.g., academic, professional, personal)
+    
+5. Error Handling:
     - Missing Dates: use null for unknown dates
     - Ambiguous Information: Use most likely interpretation
     - Inavlid URLs: Skip or mark as invalid
@@ -71,11 +81,12 @@ Processing Guidelines:
     - Unclear Education: Default to null
     - Unclear Certifications: Default to null
     - Unclear Languages: Default to null
+    - Unclear Projects: Default to null
     - Malformed Dates: Use null and log warning
     - Multiple Emails: Use most professional one
     - Conflicting Information: Use most recent/complete
 
-5. Data Validation:
+6. Data Validation:
     - Ensure all dates are YYYY-MM-DD format
     - Validate all URLs are HTTP/HTTPS format
     - Verify email addresses are properly formatted
@@ -88,8 +99,12 @@ Processing Guidelines:
     - Validate summary length (max 500 chars)
     - Validate company names (no special characters)
     - Validate institution names (no special characters)
+    - Validate project titles and descriptions
+    - Validate project technologies
+    - Validate project URLs
+    - Validate project dates
     
-6. Output Formats:
+7. Output Formats:
     - Follow the UserProfile schema exactly
     - Include all required fields
     - Mark all optional fields as null if not found
@@ -99,7 +114,7 @@ Processing Guidelines:
     - Handle section headers
     - Handle abbreviations
     
-7. Special Cases:
+8. Special Cases:
     - Handle multiple languages with proficiency levels
     - Process certifications with dates and authorities
     - Extract and validate social media profiles
@@ -108,12 +123,17 @@ Processing Guidelines:
     - Handle different date formats (MM/YYYY, Month YYYY, etc.)
     - Handle different skill categorization methods
     - Handle different education systems (e.g., GPA formats)
+    - Handle different project formats and structures
+    - Handle project dependencies and relationships
     
-8. Data Quality:
+9. Data Quality:
     - Handle duplicate entries (remove duplicates)
     - Handle inconsistent information (use most recent)
     - Handle outdated information (mark as historical)
     - Handle incomplete information (use null for missing fields)
+    - Handle project dependencies and relationships
+    - Handle project technology stacks
+    - Handle project achievements and metrics
     
 Example Edge Cases:
 1. "Present" dates: Convert to null for end_date
@@ -124,6 +144,10 @@ Example Edge Cases:
 6. Malformed dates: Use null and log warning
 7. Multiple emails: Use most professional one
 8. Conflicting information: Use most recent/complete
+9. Project dependencies: Handle related projects
+10. Project technologies: Handle technology stacks
+11. Project metrics: Handle numerical achievements
+12. Project roles: Handle multiple roles in same project
 
 Example Output:
 {
@@ -143,6 +167,21 @@ Example Output:
             "start_date": "2020-01-01",
             "end_date": null,
             "description": "Led development of..."
+        }
+    ],
+    "projects": [
+        {
+            "title": "E-commerce Platform",
+            "description": "Built a scalable e-commerce platform",
+            "technologies": ["Python", "Django", "React"],
+            "start_date": "2021-01-01",
+            "end_date": "2021-06-30",
+            "url": "https://github.com/johndoe/ecommerce",
+            "role": "Lead Developer",
+            "highlights": [
+                "Implemented real-time inventory management",
+                "Reduced checkout time by 50%"
+            ]
         }
     ]
 }
