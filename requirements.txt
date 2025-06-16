@@ -11,4 +11,8 @@ langchain-openai
 openai
 tiktoken
 python-magic
-pdfminer.six
+supabase
+logtail-python
+passlib[bcrypt]
+zxcvbn
+phonenumbers
