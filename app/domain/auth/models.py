@@ -1,5 +1,5 @@
-from datetime import datetime
-from typing import Optional
+from datetime import date, datetime
+from typing import Literal, Optional
 from uuid import UUID, uuid4
 from pydantic import BaseModel, EmailStr, Field
 
@@ -46,6 +46,41 @@ class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
     expires_at: datetime
+    
+class EmailDomain(BaseModel):
+    """Model for email domain validation and verification."""
+    id: UUID = Field(default_factory=uuid4)
+    domain: str = Field(..., description="Email domain (e.g., company.com)")
+    is_company_domain: bool = Field(default=False, description="Whether this is a company domain")
+    verification_status: Literal["pending", "verified", "rejected"] = Field(
+        default="pending",
+        description="Domain verification status"
+    )
+    verification_method: Optional[Literal["dns", "smtp", "manual"]] = Field(
+        default=None,
+        description="Method used to verify the domain"
+    )
+    verification_date: Optional[date] = Field(
+        default=None,
+        description="When the domain was verified"
+    )
+    company_id: Optional[UUID] = Field(
+        default=None,
+        description="ID of the company this domain belongs to"
+    )
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "domain": "company.com",
+                "is_company_domain": True,
+                "verification_status": "pending",
+                "verification_method": "dns",
+                "company_id": "123e4567-e89b-12d3-a456-426614174000"
+            }
+        }
     
 """
 1. UserBase Model:

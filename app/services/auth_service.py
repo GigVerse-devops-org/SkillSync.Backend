@@ -5,12 +5,14 @@ from app.domain.company.models import Company
 from app.repositories.auth_repository import AuthRepository
 from app.repositories.company_repository import CompanyRepository
 from app.core.exceptions import ValidationException, AppException
+from app.repositories.email_verification_repository import EmailVerificationRepository
 from app.utils.password_utils import hash_password, validate_password
 
 class AuthService:
     def __init__(self):
         self.auth_repo = AuthRepository()
         self.company_repo = CompanyRepository()
+        self.email_verifier_repo = EmailVerificationRepository()
     
     async def register_user(
         self, 
@@ -26,7 +28,10 @@ class AuthService:
         company_id = None
         if user_data.user_type.lower() == "client":
             if not company_data or not company_data.get("company_name"):
-                raise ValidationException("Company information is required for client registration.")
+                raise ValidationException("Company information is required for registration.")
+            
+            if not await self.email_verifier_repo.validate_company_email(user_data.email):
+                raise ValidationException("Invalid email. Please provide valid email address.")
             
             company = await self.company_repo.get_by_name(company_data["company_name"])
             if not company:
@@ -36,6 +41,9 @@ class AuthService:
                     country=company_data["country"]
                 )
                 company = await self.company_repo.create(company)
+                
+                domain = user_data.email.split('@')[1].lower()
+                await self.email_verifier_repo.verify_company_domain(domain, company.id)
             
             company_id = company.id
         
@@ -83,6 +91,9 @@ class AuthService:
             created_at=now
         )
         await self.auth_repo.create_auth_method(auth_method)
+        
+        if registration_type.lower() == "email":
+            await self.email_verifier_repo.create_verification(user_id, user_data.email)
         
         return created_user
     

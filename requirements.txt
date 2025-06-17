@@ -16,3 +16,6 @@ logtail-python
 passlib[bcrypt]
 zxcvbn
 phonenumbers
+redis
+fastapi-mail
+dnspython
